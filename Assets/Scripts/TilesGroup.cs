@@ -38,7 +38,7 @@ public class TilesGroup : MonoBehaviour
                 tiles[index] = Instantiate(TilePrefab, pos, Quaternion.identity, transform).GetComponent<Tile>();
 
                 if(levelOk)
-                tiles[index].GenerateTile(level.tilesTypei[index]);
+                // tiles[index].GenerateTile(level.tilesTypei[index]);
 
                 index++;
             }

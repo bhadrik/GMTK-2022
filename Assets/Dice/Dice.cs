@@ -19,6 +19,8 @@ public class Dice : MonoBehaviour
     [HideInInspector]
     public UnityEvent onPlayerMove;
 
+    AudioSource sound;
+
     //------------------------------------//
     #endregion
 
@@ -28,18 +30,22 @@ public class Dice : MonoBehaviour
     #region  Unity Method
     //------------------------------------//
 
+    private void Awake() {
+        sound = GetComponent<AudioSource>();
+    }
+
     void Update() {
         if (isMoving) {
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) && !blockRight) {
+        if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && !blockRight) {
             StartCoroutine(Roll(Vector3.right));
-        } else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) && !blockLeft) {
+        } else if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && !blockLeft) {
             StartCoroutine(Roll(Vector3.left));
-        } else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) && !blockForward) {
+        } else if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && !blockForward) {
             StartCoroutine(Roll(Vector3.forward));
-        } else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) && !blockBack) {
+        } else if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && !blockBack) {
             StartCoroutine(Roll(Vector3.back));
         }
     }
@@ -77,7 +83,12 @@ public class Dice : MonoBehaviour
     #region  Public
     //------------------------------------//
     
-    
+    public void ResetMovingConstrains(){
+        blockBack = false;
+        blockForward = false;
+        blockLeft = false;
+        blockRight = false;
+    }
 
     //------------------------------------//
     #endregion
@@ -92,6 +103,8 @@ public class Dice : MonoBehaviour
         isMoving = true;
 
         onPlayerMove.Invoke();
+
+        sound.Play();
 
         float remainingAngle = 90;
         Vector3 rotationCenter = transform.position + direction / 2 + Vector3.down / 2;

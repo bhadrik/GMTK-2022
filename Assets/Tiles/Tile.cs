@@ -11,12 +11,16 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public TileNumber tileType;
 
-    [SerializeField] MeshRenderer tileRenderer;
+    // [SerializeField] MeshRenderer tileRenderer;
+    [SerializeField] LineRenderer deshLine;
+    [SerializeField] LineRenderer fullLine;
     Animator tileAnimator;
     public bool done;
 
     [HideInInspector]
     public UnityEvent onFill;
+
+    AudioSource sound;
 
     //------------------------------------//
     #endregion
@@ -29,7 +33,12 @@ public class Tile : MonoBehaviour
 
     private void Awake() {
         tileAnimator = GetComponentInChildren<Animator>();
-        tileRenderer = GetComponentInChildren<MeshRenderer>();
+        sound = GetComponent<AudioSource>();
+    }
+
+    private void Start() {
+        fullLine.gameObject.SetActive(done);
+        deshLine.gameObject.SetActive(!done);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,6 +48,12 @@ public class Tile : MonoBehaviour
 
         else if(other.gameObject.CompareTag(tileType.ToString())){
             tileAnimator.Play("tile done");
+            deshLine.material.SetInt("_Animated", 0);
+            done = true;
+            onFill.Invoke();
+            sound.Play();
+            fullLine.gameObject.SetActive(true);
+            deshLine.gameObject.SetActive(false);
         }
     }
 
@@ -50,17 +65,17 @@ public class Tile : MonoBehaviour
 
     #region  Public
     //------------------------------------//
-    //New tile from SO
-    public void GenerateTile(TileNumber type)
-    {
-        if(type == TileNumber.none){
-            type = (TileNumber)UnityEngine.Random.Range(1, 7);
-        }
+    // //New tile from SO
+    // public void GenerateTile(TileNumber type)
+    // {
+    //     if(type == TileNumber.none){
+    //         type = (TileNumber)UnityEngine.Random.Range(1, 7);
+    //     }
 
-        tileRenderer.material = GameManager.instance.GetMaterialFromType(type);
+    //     tileRenderer.material = GameManager.instance.GetMaterialFromType(type);
 
-        if(type != TileNumber.none) DebugActivate();
-    }
+    //     if(type != TileNumber.none) DebugActivate();
+    // }
 
     public void DebugActivate(){
         tileAnimator.Play("tile done");
