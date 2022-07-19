@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     [SerializeField] GameObject finishCanvas;
     [SerializeField] GameObject uiCanvas;
     [SerializeField] SceneCover blackCurtain;
+    [SerializeField] TextMeshProUGUI levelCountText;
+
 
     [Header("Clip")]
     [SerializeField] AudioClip positiveClip;
@@ -54,9 +56,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     private void Start() {
         LoadLevel(0, "Level 1");
         moveText.text = "";
+        levelCountText.text = $"{loadedLevelIndex+1}/{levels.Length}";
     }
 
-#if UNITY_EDITOR
+// #if UNITY_EDITOR
     private void Update() {
         if(Input.GetKeyDown(KeyCode.K)){
             PreviousLevel();
@@ -65,7 +68,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
             NextLevel();
         }
     }
-#endif
+// #endif
     //------------------------------------//
     #endregion
 
@@ -92,15 +95,17 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         Application.OpenURL("https://pixabay.com/sound-effects/");
     }
 
-#if UNITY_EDITOR
+// #if UNITY_EDITOR
     public void NextLevel(){
-        LoadLevel(loadedLevelIndex+1, "Next Level " + loadedLevelIndex + 1);
+        if(loadedLevelIndex == 9) return;
+        LoadLevel(loadedLevelIndex+1, "Next Level " + (loadedLevelIndex + 2));
     }
 
     public void PreviousLevel(){
-        LoadLevel(loadedLevelIndex-1, "Previous Level " + loadedLevelIndex + 1);
+        if(loadedLevelIndex == 0) return;
+        LoadLevel(loadedLevelIndex-1, "Previous Level " + (loadedLevelIndex));
     }
-#endif
+// #endif
     //------------------------------------//
     #endregion
 
@@ -142,6 +147,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
         remainMoves = lodedLevel.moves;
         moveText.text = remainMoves.ToString();
+        levelCountText.text = $"{loadedLevelIndex+1}/{levels.Length}";
     }
 
     private void ShowFinishUI(){

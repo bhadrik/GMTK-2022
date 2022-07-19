@@ -35,7 +35,7 @@ public class Tile : MonoBehaviour
     //------------------------------------//
 
     private void Awake() {
-        tileRenderer = GetComponent<MeshRenderer>();
+        tileRenderer = GetComponentInChildren<MeshRenderer>();
         sound = GetComponent<AudioSource>();
     }
 
@@ -54,7 +54,7 @@ public class Tile : MonoBehaviour
 
             deshLine.material.SetInt("_Animated", 0);
             
-            tileRenderer.material.SetColor("_Color", enableTileColor);
+            tileRenderer.material.SetColor("_BaseColor", enableTileColor);
             
             fullLine.gameObject.SetActive(true);
             deshLine.gameObject.SetActive(false);

@@ -1488,7 +1488,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.8822261, y: 1}
+    m_SensorSize: {x: 1.6251079, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1810,7 +1810,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 960.00006, y: -525.555}
-  m_SizeDelta: {x: 1394.69, y: 175.72}
+  m_SizeDelta: {x: 887.08, y: 175.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &896971144
 MonoBehaviour:
@@ -1846,7 +1846,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'You have completed ______ (pleae give it a name)
+  m_text: 'You have completed <b><u>Pilo Paso</u></b>
 
     Thank you for playing
     so far.'
@@ -2330,7 +2330,8 @@ MonoBehaviour:
   moveText: {fileID: 626811705}
   finishCanvas: {fileID: 2070746997}
   uiCanvas: {fileID: 1482798811}
-  blackCurtain: {fileID: 0}
+  blackCurtain: {fileID: 1973330145}
+  levelCountText: {fileID: 354697906}
   positiveClip: {fileID: 8300000, guid: 042dd40e923568e41b6988328fd291f3, type: 3}
   negativeClip: {fileID: 8300000, guid: 9dd194993dfdaf5478328a3a0dda9eb2, type: 3}
   levels:
@@ -3341,7 +3342,6 @@ GameObject:
   - component: {fileID: 1973330141}
   - component: {fileID: 1973330143}
   - component: {fileID: 1973330142}
-  - component: {fileID: 1973330144}
   - component: {fileID: 1973330145}
   - component: {fileID: 1973330146}
   m_Layer: 5
@@ -3410,26 +3410,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1973330140}
   m_CullTransparentMesh: 1
---- !u!95 &1973330144
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1973330140}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9fea64a2039a94c4c8415be3a3753283, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1973330145
 MonoBehaviour:
   m_ObjectHideFlags: 0

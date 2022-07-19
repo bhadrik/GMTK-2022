@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStart: {fileID: 0}
-  moves: 70
+  moves: 50
   onObjectiveComplete:
     m_PersistentCalls:
       m_Calls: []

@@ -52,7 +52,7 @@ MonoBehaviour:
   tileType: 0
   deshLine: {fileID: 6663462841032217044}
   fullLine: {fileID: 7083053672000028052}
-  enableTileColor: {r: 0, g: 0, b: 0, a: 0}
+  enableTileColor: {r: 0.28702974, g: 0.7924528, b: 0.26464927, a: 1}
   done: 0
   onFill:
     m_PersistentCalls:
