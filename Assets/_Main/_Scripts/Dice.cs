@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 
 public class Dice : MonoBehaviour
 {
@@ -35,6 +35,11 @@ public class Dice : MonoBehaviour
     }
 
     void Update() {
+
+        if(Input.GetKey(KeyCode.U)){
+            
+        }
+
         if (isMoving) {
             return;
         }
@@ -88,6 +93,19 @@ public class Dice : MonoBehaviour
         blockForward = false;
         blockLeft = false;
         blockRight = false;
+    }
+
+    public void GoingAnim(){
+        Sequence s = DOTween.Sequence();
+        s.Append(transform.DOScale(Vector3.one * 1.05f, 0.1f));
+        s.Append(transform.DOScale(Vector3.zero, 0.4f));
+    }
+
+    public void CommingAnim(){
+        Sequence s = DOTween.Sequence();
+        // s.Append(transform.DOScale(Vector3.one, 0.5f));
+        s.Append(transform.DOScale(Vector3.one * 1.05f, 0.4f));
+        s.Append(transform.DOScale(Vector3.one, 0.1f));
     }
 
     //------------------------------------//

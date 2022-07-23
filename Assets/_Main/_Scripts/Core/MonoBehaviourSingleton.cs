@@ -1,19 +1,22 @@
 using UnityEngine;
 
-public class MonoBehaviourSingleton<T> : MonoBehaviour where T: MonoBehaviourSingleton<T>
+public class MonoBehaviourSingleton< TSelfType > : MonoBehaviour where TSelfType : MonoBehaviour
 {
-    public static T instance { get; protected set; }
- 
-    void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(this);
-            throw new UnityException("An instance of this singleton already exists.");
-        }
-        else
-        {
-            instance = (T)this;
-        }
-    }
+	private static TSelfType m_Instance = null;
+	public static TSelfType Instance
+	{
+		get
+		{
+			if (m_Instance == null)
+			{
+				m_Instance = (TSelfType)FindObjectOfType(typeof(TSelfType));
+				if (m_Instance == null)
+				{
+					m_Instance = (new GameObject(typeof(TSelfType).Name)).AddComponent<TSelfType>();
+				}
+				DontDestroyOnLoad(m_Instance.gameObject);
+			}
+			return m_Instance;
+		}
+	}
 }

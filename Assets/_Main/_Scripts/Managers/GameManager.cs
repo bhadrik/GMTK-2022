@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,12 +29,13 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     [SerializeField] GameObject[] levels;
 
     
-    Objective lodedLevel;
+    LevelPrefab lodedLevel;
     AudioSource audioSource;
     AnimateUI endUI;
 
     int loadedLevelIndex;
     int remainMoves;
+    bool currentLevelCompleted;
 
     //------------------------------------//
     #endregion
@@ -61,11 +61,14 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
 // #if UNITY_EDITOR
     private void Update() {
-        if(Input.GetKeyDown(KeyCode.K)){
+        if(Input.GetKeyUp(KeyCode.K)){
             PreviousLevel();
         }
-        else if (Input.GetKeyDown(KeyCode.L)){
+        else if (Input.GetKeyUp(KeyCode.L)){
             NextLevel();
+        }
+        else if(Input.GetKeyUp(KeyCode.R)){
+            RestartLevel();
         }
     }
 // #endif
@@ -82,7 +85,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         SceneManager.LoadSceneAsync(0);
     }
 
-    public void RestartLevel(string msg){
+    public void RestartLevel(string msg = null){
         player.enabled = false;
 
         if(string.IsNullOrEmpty(msg))
@@ -137,11 +140,18 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
             Destroy(lodedLevel.gameObject);
         }
 
-        lodedLevel = Instantiate(levels[loadedLevelIndex], Vector3.zero, Quaternion.identity).GetComponent<Objective>();
+        lodedLevel = Instantiate(levels[loadedLevelIndex], Vector3.zero, Quaternion.identity).GetComponent<LevelPrefab>();
         
-        lodedLevel.onObjectiveComplete.AddListener(() => StartCoroutine(OnLevelComplete()));
+        lodedLevel.onObjectiveComplete.AddListener(() => OnLevelComplete());
+        currentLevelCompleted = false;
 
-        player.enabled = true;
+        player.transform.localScale = Vector3.zero;
+
+        Run.After(1.5f, () => {
+            player.enabled = true;
+            player.CommingAnim();
+        });
+
         player.ResetMovingConstrains();
         player.transform.SetPositionAndRotation(lodedLevel.playerStart.position, lodedLevel.playerStart.rotation);
 
@@ -157,24 +167,39 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     }
 
     private void OnPlayerMove(){
+#if UNITY_EDITOR
+        if(lodedLevel.infinite) return;
+#endif
+
         remainMoves--;
         moveText.text = remainMoves.ToString();
 
+        //Check for move finish
         if(remainMoves == 0){
-            audioSource.PlayOneShot(negativeClip);
-            RestartLevel("Out of moves");
+            // Lost control while level finish check
+            player.enabled = false;
+
+            Run.After(1, () => {
+                if(!currentLevelCompleted){
+                    audioSource.PlayOneShot(negativeClip);
+                    RestartLevel("Out of moves");
+                }
+            });
         }
     }
 
-    private IEnumerator OnLevelComplete(){
+    private void OnLevelComplete(){
         // Debug.Log("Level complete");
         player.enabled = false;
+        currentLevelCompleted = true;
+
+        player.GoingAnim();
 
         audioSource.PlayOneShot(positiveClip);
 
-        yield return new WaitForSeconds(1.0f);
-
-        LoadLevel(loadedLevelIndex+1, $"Level {loadedLevelIndex+2}");
+        Run.After(1.0f, () => {
+            LoadLevel(loadedLevelIndex+1, $"Level {loadedLevelIndex+2}");
+        });
     }
 
     //------------------------------------//

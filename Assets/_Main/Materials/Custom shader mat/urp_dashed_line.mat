@@ -43,5 +43,5 @@ Material:
     - _FillingValue: 0
     - _Tiling: 0.6
     m_Colors:
-    - _Color: {r: 0, g: 0, b: 0, a: 0.9019608}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

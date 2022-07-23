@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,12 +9,15 @@ public class Tile : MonoBehaviour
 
     [SerializeField] public TileNumber tileType;
 
-    [SerializeField] LineRenderer deshLine;
-    [SerializeField] LineRenderer fullLine;
+    [SerializeField] GameObject deshLine;
+    [SerializeField] GameObject fullLine;
 
     [Space]
-    [SerializeField] Color enableTileColor;
-    public bool done;
+    [SerializeField] Color notCollectedColor_icon;
+    [SerializeField] Color notCollectedColor_bg;
+    [SerializeField] Color collectedColor_icon;
+    [SerializeField] Color collectedColor_bg;
+    public bool isActive;
 
 
     [HideInInspector]
@@ -25,54 +26,50 @@ public class Tile : MonoBehaviour
     AudioSource sound;
     MeshRenderer tileRenderer;
 
+    const string BACK_COLOR = "_BgColor";
+    const string ICON_COLOR = "_IconColor";
+
     //------------------------------------//
     #endregion
 
 
 
 
-    #region  Unity Method
+    #region Unity Method
     //------------------------------------//
-
     private void Awake() {
         tileRenderer = GetComponentInChildren<MeshRenderer>();
         sound = GetComponent<AudioSource>();
     }
 
     private void Start() {
-        fullLine.gameObject.SetActive(done);
-        deshLine.gameObject.SetActive(!done);
+        fullLine.SetActive(isActive);
+        deshLine.SetActive(!isActive);
+
+        ActiveStatus(isActive);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         // In game tile touch
-        if(done) return;
+        if(isActive) return;
 
         else if(other.gameObject.CompareTag(tileType.ToString())){
-            done = true;
+            isActive = true;
 
-            deshLine.material.SetInt("_Animated", 0);
-            
-            tileRenderer.material.SetColor("_BaseColor", enableTileColor);
-            
+            // Visual changes in tile
             fullLine.gameObject.SetActive(true);
             deshLine.gameObject.SetActive(false);
+            ActiveStatus(isActive);
 
             sound.Play();
             onFill.Invoke();
         }
     }
 
-    //------------------------------------//
-    #endregion
-
-
-
-
-    #region  Public
-    //------------------------------------//
-    
+    // private void OnValidate() {
+    //     ActiveStatus(isActive);
+    // }
 
     //------------------------------------//
     #endregion
@@ -80,10 +77,38 @@ public class Tile : MonoBehaviour
 
 
 
-    #region  Private
+    #region Public
     //------------------------------------//
     
     
+
+    //------------------------------------//
+    #endregion
+
+
+
+
+    #region Private
+    //------------------------------------//
+    
+    private void ActiveStatus(bool isActive){
+        Color bg = isActive? collectedColor_bg : notCollectedColor_bg;
+        Color icon = isActive? collectedColor_icon : notCollectedColor_icon;
+
+
+#if UNITY_EDITOR
+        if(!Application.isPlaying){
+            tileRenderer = GetComponentInChildren<MeshRenderer>();
+
+            tileRenderer.sharedMaterial.SetColor(BACK_COLOR, bg);
+            tileRenderer.sharedMaterial.SetColor(ICON_COLOR, icon);
+            return;
+        }
+#endif
+
+        tileRenderer.material.SetColor(BACK_COLOR, bg);
+        tileRenderer.material.SetColor(ICON_COLOR, icon);
+    }
 
     //------------------------------------//
     #endregion
